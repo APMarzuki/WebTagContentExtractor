@@ -1,0 +1,212 @@
+{
+  "presets": [
+    {
+      "name": "HTTPBin Test Page",
+      "url": "https://httpbin.org/html",
+      "selector": "h1, p",
+      "attribute": "text",
+      "mode": "simple",
+      "description": "Reliable test page - always works!"
+    },
+    {
+      "name": "Example.com Elements",
+      "url": "https://example.com",
+      "selector": "h1, p, a",
+      "attribute": "text",
+      "mode": "simple",
+      "description": "Simple example website for testing"
+    },
+    {
+      "name": "CES Tech Exhibition",
+      "url": "https://www.ces.tech/exhibitors",
+      "selector": ".exhibitor-name, .company-name, .exhibitor-link, h2, h3",
+      "attribute": "text",
+      "mode": "selenium",
+      "description": "CES technology exhibitors"
+    },
+    {
+      "name": "All Images Extractor",
+      "url": "https://httpbin.org/image",
+      "selector": "img",
+      "attribute": "src",
+      "mode": "simple",
+      "description": "Extract all image URLs from any website"
+    },
+    {
+      "name": "Milipol Paris Exhibitors",
+      "url": "https://www.milipol.com/en/catalogue",
+      "selector": ".card-nomExposant-text",
+      "attribute": "text",
+      "mode": "simple",
+      "description": "Milipol Paris exhibitors - Try simple mode"
+    },
+    {
+      "name": "Enforce Tac Exhibitors",
+      "url": "https://www.enforcetac.com/en/exhibitors-products/find-exhibitors",
+      "selector": "[data-testid='company-results-item']",
+      "attribute": "aria-label",
+      "mode": "selenium",
+      "description": "Enforce Tac exhibition exhibitors"
+    },
+    {
+      "name": "Security Essen Exhibitors",
+      "url": "https://www.security-essen.de/exhibitors-products/exhibitors",
+      "selector": ".exhibitor-name, .exhibitor-title, h3, [class*='exhibitor']",
+      "attribute": "text",
+      "mode": "auto",
+      "description": "Security Essen exhibition - usually works well"
+    },
+    {
+      "name": "Cyber Tech Israel Exhibitors",
+      "url": "https://www.cybertechisrael.com/partners",
+      "selector": "h2.txt-blue .field--name-title",
+      "attribute": "text",
+      "mode": "simple",
+      "description": "Cyber Tech Israel conference partners and exhibitors"
+    },
+    {
+      "name": "Security & Policing UK Exhibitors",
+      "url": "https://www.securityandpolicing.co.uk/exhibitors/exhibitors-list-2025/",
+      "selector": "a[href*='/exhibitors-list-2025/']",
+      "attribute": "href",
+      "mode": "simple",
+      "description": "Security & Policing UK exhibitors - extracts company names from URLs"
+    },
+    {
+      "name": "SECON Expo 2026 Exhibitors",
+      "url": "https://exhibitors.informamarkets-info.com/event/2026SEC/en-US",
+      "selector": ".card-title a, .name a, h4.card-title",
+      "attribute": "text",
+      "mode": "selenium",
+      "description": "SECON Expo 2026 exhibitors - official directory with Selenium"
+    },
+    {
+      "name": "World Border Congress Exhibitors",
+      "url": "https://exhibiting.torch-events.app/exhibitors/39",
+      "selector": "h2.text-lg",
+      "attribute": "text",
+      "mode": "simple",
+      "description": "World Border Congress exhibitors - clean company names"
+    },
+    {
+      "name": "DSA Exhibition Exhibitors",
+      "url": "https://www.dsaexhibition.com/exhibitors-profile",
+      "selector": ".title-collapse",
+      "attribute": "text",
+      "mode": "simple",
+      "description": "DSA Exhibition exhibitors - defence and security companies"
+    },
+    {
+      "name": "Milipol Asia-Pacific Companies",
+      "url": "https://www.milipolasiapacific.com/show-information/exhibitor-profile/",
+      "selector": ".nobullet li, .tabcontent span, .tabtitle",
+      "attribute": "text",
+      "mode": "selenium",
+      "description": "Milipol Asia-Pacific companies - requires Selenium for dropdown menus"
+    },
+    {
+      "name": "GPEC 2024 - Page 1",
+      "url": "https://exhibitorlist-2-2.fairdesigner.de/catalog/?tenantnr=10169&tenant=EMW&eventid=GPEC2024&language=de&page=1&layout=list&entries_per_page=50",
+      "selector": ".exhibitor-list-card-content h5",
+      "attribute": "text",
+      "mode": "simple",
+      "description": "GPEC 2024 exhibitors - Page 1 of 10"
+    },
+    {
+      "name": "GPEC 2024 - Page 2",
+      "url": "https://exhibitorlist-2-2.fairdesigner.de/catalog/?tenantnr=10169&tenant=EMW&eventid=GPEC2024&language=de&page=2&layout=list&entries_per_page=50",
+      "selector": ".exhibitor-list-card-content h5",
+      "attribute": "text",
+      "mode": "simple",
+      "description": "GPEC 2024 exhibitors - Page 2 of 10"
+    },
+    {
+      "name": "GPEC 2024 - Page 3",
+      "url": "https://exhibitorlist-2-2.fairdesigner.de/catalog/?tenantnr=10169&tenant=EMW&eventid=GPEC2024&language=de&page=3&layout=list&entries_per_page=50",
+      "selector": ".exhibitor-list-card-content h5",
+      "attribute": "text",
+      "mode": "simple",
+      "description": "GPEC 2024 exhibitors - Page 3 of 10"
+    },
+    {
+      "name": "GPEC 2024 - Page 4",
+      "url": "https://exhibitorlist-2-2.fairdesigner.de/catalog/?tenantnr=10169&tenant=EMW&eventid=GPEC2024&language=de&page=4&layout=list&entries_per_page=50",
+      "selector": ".exhibitor-list-card-content h5",
+      "attribute": "text",
+      "mode": "simple",
+      "description": "GPEC 2024 exhibitors - Page 4 of 10"
+    },
+    {
+      "name": "GPEC 2024 - Page 5",
+      "url": "https://exhibitorlist-2-2.fairdesigner.de/catalog/?tenantnr=10169&tenant=EMW&eventid=GPEC2024&language=de&page=5&layout=list&entries_per_page=50",
+      "selector": ".exhibitor-list-card-content h5",
+      "attribute": "text",
+      "mode": "simple",
+      "description": "GPEC 2024 exhibitors - Page 5 of 10"
+    },
+    {
+      "name": "GPEC 2024 - Page 6",
+      "url": "https://exhibitorlist-2-2.fairdesigner.de/catalog/?tenantnr=10169&tenant=EMW&eventid=GPEC2024&language=de&page=6&layout=list&entries_per_page=50",
+      "selector": ".exhibitor-list-card-content h5",
+      "attribute": "text",
+      "mode": "simple",
+      "description": "GPEC 2024 exhibitors - Page 6 of 10"
+    },
+    {
+      "name": "GPEC 2024 - Page 7",
+      "url": "https://exhibitorlist-2-2.fairdesigner.de/catalog/?tenantnr=10169&tenant=EMW&eventid=GPEC2024&language=de&page=7&layout=list&entries_per_page=50",
+      "selector": ".exhibitor-list-card-content h5",
+      "attribute": "text",
+      "mode": "simple",
+      "description": "GPEC 2024 exhibitors - Page 7 of 10"
+    },
+    {
+      "name": "GPEC 2024 - Page 8",
+      "url": "https://exhibitorlist-2-2.fairdesigner.de/catalog/?tenantnr=10169&tenant=EMW&eventid=GPEC2024&language=de&page=8&layout=list&entries_per_page=50",
+      "selector": ".exhibitor-list-card-content h5",
+      "attribute": "text",
+      "mode": "simple",
+      "description": "GPEC 2024 exhibitors - Page 8 of 10"
+    },
+    {
+      "name": "GPEC 2024 - Page 9",
+      "url": "https://exhibitorlist-2-2.fairdesigner.de/catalog/?tenantnr=10169&tenant=EMW&eventid=GPEC2024&language=de&page=9&layout=list&entries_per_page=50",
+      "selector": ".exhibitor-list-card-content h5",
+      "attribute": "text",
+      "mode": "simple",
+      "description": "GPEC 2024 exhibitors - Page 9 of 10"
+    },
+    {
+      "name": "GPEC 2024 - Page 10",
+      "url": "https://exhibitorlist-2-2.fairdesigner.de/catalog/?tenantnr=10169&tenant=EMW&eventid=GPEC2024&language=de&page=10&layout=list&entries_per_page=50",
+      "selector": ".exhibitor-list-card-content h5",
+      "attribute": "text",
+      "mode": "simple",
+      "description": "GPEC 2024 exhibitors - Page 10 of 10"
+    },
+    {
+      "name": "Eurosatory 2024 - Page 1",
+      "url": "https://www.eurosatory.com/exposants-et-produits/exposants-2024/",
+      "selector": "td.column-1",
+      "attribute": "text",
+      "mode": "selenium",
+      "description": "Eurosatory 2024 exhibitors - Page 1 of 21 (100 companies)"
+    },
+    {
+      "name": "Eurosatory 2024 - All Exhibitors",
+      "url": "https://www.eurosatory.com/exposants-et-produits/exposants-2024/",
+      "selector": "td.column-1",
+      "attribute": "text",
+      "mode": "selenium",
+      "description": "Eurosatory 2024 all exhibitors (2,015 companies) - Use with pagination"
+    },
+    {
+      "name": "Infosecurity Europe Products",
+      "url": "https://www.infosecurityeurope.com/en-gb/exhibitor-directory/product-directory.html",
+      "selector": "h4.product-name",
+      "attribute": "text",
+      "mode": "selenium",
+      "description": "Infosecurity Europe product directory - 90+ products"
+    }
+  ]
+}
