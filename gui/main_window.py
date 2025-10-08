@@ -349,26 +349,37 @@ class ConfigManager:
             # For PyInstaller bundled app
             if getattr(sys, 'frozen', False):
                 base_path = os.path.dirname(sys.executable)
+                presets_path = os.path.join(base_path, 'presets.json')
             else:
+                # Running as script
                 base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+                presets_path = os.path.join(base_path, 'presets.json')
 
-            presets_path = os.path.join(base_path, 'presets.json')
-
-            print(f"Looking for presets at: {presets_path}")
+            print(f"🔍 DEBUG: Looking for presets at: {presets_path}")
+            print(f"🔍 DEBUG: File exists: {os.path.exists(presets_path)}")
 
             if os.path.exists(presets_path):
                 with open(presets_path, 'r', encoding='utf-8') as f:
                     data = json.load(f)
                     presets = data.get('presets', [])
-                    print(f"Loaded {len(presets)} presets from: {presets_path}")
+                    print(f"🔍 DEBUG: Raw data keys: {list(data.keys())}")  # Fixed: added list()
+                    print(f"🔍 DEBUG: Number of presets found: {len(presets)}")
+                    print(f"🔍 DEBUG: First few preset names: {[p.get('name') for p in presets[:3]]}")
+
+                    print(f"✅ Loaded {len(presets)} presets from: {presets_path}")
                     return presets
             else:
-                print(f"Presets file not found at: {presets_path}")
-                # Return default presets if file doesn't exist
+                print(f"❌ Presets file not found at: {presets_path}")
+                # List files in directory for debugging
+                if os.path.exists(base_path):
+                    files = os.listdir(base_path)
+                    print(f"🔍 DEBUG: Files in {base_path}: {files}")
                 return self.get_default_presets()
 
         except Exception as e:
-            print(f"Error loading presets: {e}")
+            print(f"❌ Error loading presets: {e}")
+            import traceback
+            traceback.print_exc()
             return self.get_default_presets()
 
     def get_default_presets(self):
