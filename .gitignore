@@ -19,15 +19,17 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-MANIFEST
-
-# PyInstaller
-*.spec
 
 # Virtual Environment
 .venv/
 venv/
+ENV/
 env/
+
+# PyInstaller
+build/
+dist/
+*.spec
 
 # IDE
 .vscode/
@@ -40,7 +42,7 @@ env/
 Thumbs.db
 
 # Project specific
-/outputs/*
-!/outputs/.gitkeep
-/build/
-/dist/
+/outputs/
+/localpycs/
+/analysis/
+/WebTagContentExtractor.exe

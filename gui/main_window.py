@@ -171,39 +171,71 @@ class SimpleScraper:
             # Add page parameter with ?
             return f"{base_url}?page={page_number}"
 
-    def scrape(self, url, css_selector, attribute='text', contains_text=None, timeout=30):
-        """Extract content from static HTML pages"""
+    def scrape(self, url, css_selector, attribute='text', contains_text=None, timeout=30, enable_scroll=True,
+               max_scrolls=8, scroll_pause=2):
+        """Enhanced scraping with scroll support"""
         try:
-            print(f"🔄 [SIMPLE] Downloading: {url}")
-            response = self.session.get(url, timeout=timeout)
-            response.raise_for_status()
+            print(f"🚀 [SELENIUM] Opening: {url}")
+            self.driver.get(url)
 
-            soup = BeautifulSoup(response.content, 'html.parser')
-            elements = soup.select(css_selector)
+            # Wait for page load
+            import time
+            time.sleep(3)
+
+            # Wait for initial elements
+            print(f"⏳ [SELENIUM] Waiting for: {css_selector}")
+            WebDriverWait(self.driver, timeout).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, css_selector))
+            )
+
+            # Scroll to load all content if enabled
+            if enable_scroll:
+                print(f"🔄 [SELENIUM] Scrolling {max_scrolls} times to load all content...")
+                last_height = self.driver.execute_script("return document.body.scrollHeight")
+
+                for i in range(max_scrolls):
+                    self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                    print(f"📜 [SELENIUM] Scroll {i + 1}/{max_scrolls} - Waiting {scroll_pause}s...")
+                    time.sleep(scroll_pause)
+
+                    new_height = self.driver.execute_script("return document.body.scrollHeight")
+                    if new_height == last_height:
+                        print("✅ [SELENIUM] No more content to load")
+                        break
+                    last_height = new_height
+
+                # Scroll back to top
+                self.driver.execute_script("window.scrollTo(0, 0);")
+
+            # Find elements after scrolling
+            elements = self.driver.find_elements(By.CSS_SELECTOR, css_selector)
 
             if not elements:
-                print(f"❌ [SIMPLE] No elements found with: {css_selector}")
+                print(f"❌ [SELENIUM] No elements found with: {css_selector}")
                 return []
+
+            print(f"✅ [SELENIUM] Found {len(elements)} elements")
 
             extracted_data = []
             for element in elements:
                 try:
-                    if contains_text and contains_text not in str(element):
-                        continue
+                    if attribute == 'text':
+                        content = element.text.strip()
+                    else:
+                        content = element.get_attribute(attribute)
 
-                    content = self._extract_attribute(element, attribute)
-                    if content and content.strip():
+                    if content and (not contains_text or contains_text in content):
                         extracted_data.append(content)
 
                 except Exception as e:
-                    print(f"⚠️ [SIMPLE] Error processing element: {e}")
+                    print(f"⚠️ [SELENIUM] Error processing element: {e}")
                     continue
 
-            print(f"✅ [SIMPLE] Found {len(extracted_data)} items")
+            print(f"🎯 [SELENIUM] Extracted {len(extracted_data)} items")
             return extracted_data
 
         except Exception as e:
-            print(f"❌ [SIMPLE] Error: {e}")
+            print(f"❌ [SELENIUM] Error: {e}")
             return []
 
     def _extract_attribute(self, element, attribute):
@@ -246,7 +278,8 @@ class SeleniumScraper:
             print(f"❌ [SELENIUM] Failed to initialize: {e}")
             raise
 
-    def scrape(self, url, css_selector, attribute='text', contains_text=None, timeout=30):
+    def scrape(self, url, css_selector, attribute='text', contains_text=None, timeout=30,
+               enable_scroll=True, max_scrolls=20, scroll_pause=3, handle_pagination=True):
         """Extract content from JavaScript-rendered pages"""
         try:
             print(f"🚀 [SELENIUM] Opening: {url}")
@@ -344,37 +377,55 @@ class ConfigManager:
             os.makedirs(self.config_dir)
 
     def load_presets(self):
-        """Load website presets from presets.json in executable directory"""
+        """Load website presets from presets.json"""
         try:
-            # For PyInstaller bundled app
             if getattr(sys, 'frozen', False):
+                # Running as compiled executable
                 base_path = os.path.dirname(sys.executable)
-                presets_path = os.path.join(base_path, 'presets.json')
+
+                # Try multiple possible locations
+                possible_paths = [
+                    os.path.join(base_path, 'presets.json'),  # Same folder as .exe
+                    os.path.join(sys._MEIPASS, 'presets.json'),  # PyInstaller temp folder
+                ]
+
+                for presets_path in possible_paths:
+                    print(f"🔍 [EXE DEBUG] Trying presets path: {presets_path}")
+                    print(f"🔍 [EXE DEBUG] File exists: {os.path.exists(presets_path)}")
+                    if os.path.exists(presets_path):
+                        print(f"✅ [EXE DEBUG] Found presets at: {presets_path}")
+                        with open(presets_path, 'r', encoding='utf-8') as f:
+                            data = json.load(f)
+                            presets = data.get('presets', [])
+                            print(f"✅ [EXE DEBUG] Loaded {len(presets)} presets")
+                            return presets
+
+                # If we get here, no presets found
+                print("❌ [EXE DEBUG] Could not find presets.json in any location")
+                # List files for debugging
+                print(f"🔍 [EXE DEBUG] Files in {base_path}:")
+                if os.path.exists(base_path):
+                    for file in os.listdir(base_path):
+                        print(f"   - {file}")
+                return self.get_default_presets()
+
             else:
                 # Running as script
                 base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
                 presets_path = os.path.join(base_path, 'presets.json')
 
-            print(f"🔍 DEBUG: Looking for presets at: {presets_path}")
-            print(f"🔍 DEBUG: File exists: {os.path.exists(presets_path)}")
+                print(f"🔍 [SCRIPT DEBUG] Looking for presets at: {presets_path}")
+                print(f"🔍 [SCRIPT DEBUG] File exists: {os.path.exists(presets_path)}")
 
-            if os.path.exists(presets_path):
-                with open(presets_path, 'r', encoding='utf-8') as f:
-                    data = json.load(f)
-                    presets = data.get('presets', [])
-                    print(f"🔍 DEBUG: Raw data keys: {list(data.keys())}")  # Fixed: added list()
-                    print(f"🔍 DEBUG: Number of presets found: {len(presets)}")
-                    print(f"🔍 DEBUG: First few preset names: {[p.get('name') for p in presets[:3]]}")
-
-                    print(f"✅ Loaded {len(presets)} presets from: {presets_path}")
-                    return presets
-            else:
-                print(f"❌ Presets file not found at: {presets_path}")
-                # List files in directory for debugging
-                if os.path.exists(base_path):
-                    files = os.listdir(base_path)
-                    print(f"🔍 DEBUG: Files in {base_path}: {files}")
-                return self.get_default_presets()
+                if os.path.exists(presets_path):
+                    with open(presets_path, 'r', encoding='utf-8') as f:
+                        data = json.load(f)
+                        presets = data.get('presets', [])
+                        print(f"✅ [SCRIPT DEBUG] Loaded {len(presets)} presets")
+                        return presets
+                else:
+                    print(f"❌ [SCRIPT DEBUG] Presets file not found")
+                    return self.get_default_presets()
 
         except Exception as e:
             print(f"❌ Error loading presets: {e}")
